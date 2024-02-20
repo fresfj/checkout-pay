@@ -1,9 +1,9 @@
-import { initializeApp, getApps, cert ,} from 'firebase-admin/app'
+import { initializeApp, getApps, cert, } from 'firebase-admin/app'
 import { getFirestore } from 'firebase-admin/firestore';
-const serviceAccount = require('./85e75920eb.json')
+const serviceAccount = require('./f427aba255.json')
 const firebaseAdminConfig = {
   credential: cert(serviceAccount),
-  databaseURL: "https://cash-fit-2dc68-default-rtdb.firebaseio.com"
+  databaseURL: process.env.NEXT_PUBLIC_FIREBASE_URL
 }
 
 export function customInitApp() {
