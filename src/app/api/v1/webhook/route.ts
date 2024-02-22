@@ -30,15 +30,16 @@ export async function POST(req: NextRequest) {
       })
     } else if (
       data.event === 'PAYMENT_RECEIVED' &&
-      data.payment?.billingType === 'PIX'
+      (data.payment?.billingType === 'PIX' ||
+        data.payment?.billingType === 'BOLETO')
     ) {
-      const indicationsQuery = await db
-        .collection('indications')
+      const ordersQuery = await db
+        .collection('orders')
         .where('payment.id', '==', data.payment.id)
         .get()
 
-      indicationsQuery.docs.map(async indicationDoc => {
-        await db.collection('indications').doc(indicationDoc.id).update({
+      ordersQuery.docs.map(async orderDoc => {
+        await db.collection('orders').doc(orderDoc.id).update({
           payment: data.payment,
           status: true
         })
