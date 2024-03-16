@@ -3,6 +3,7 @@ import { NextResponse, type NextRequest } from 'next/server'
 
 export async function GET(req: NextRequest) {
   const id = req.nextUrl.searchParams.get('id')
+
   if (!id) {
     return NextResponse.json(`Preconditions`, { status: 422 })
   }
@@ -24,7 +25,14 @@ export async function POST(req: NextRequest) {
   const barCode = async (value: any) => {
     try {
       const resp = await api.get(`payments/${value.id}/identificationField`)
-      return { ...value, ...resp.data }
+      const respx = await api.get(`payments/${value.id}/pixQrCode`)
+
+      return {
+        ...value,
+        ...resp.data,
+        encodedImage: respx.data.encodedImage,
+        payload: respx.data.payload
+      }
     } catch (err) {
       return false
     }
